@@ -3,6 +3,7 @@ package hello.springmvc.basic.response;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
@@ -22,5 +23,15 @@ public class ResponseViewController {
         model.addAttribute("data", "Hello Seungwoon!");
 
         return "response/hello";
+    }
+
+    /**
+     * V3는 너무 불명확해서 비권장
+     */
+    @RequestMapping("/response/hello")
+    public void responseViewV3(Model model) {
+
+        model.addAttribute("data", "Hello Seungwoon!");
+
     }
 }
