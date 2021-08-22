@@ -1,7 +1,9 @@
 package hello.springmvc.basic.request;
 
+import hello.springmvc.basic.HelloData;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -68,8 +70,8 @@ public class RequestParamController {
     }
 
     /**
-     *  defaultValue가 들어가면 required가 있던 없던 상관없음
-     *  defaultValue를 적용하면 빈 문자일 경우에도 defaultValue값으로 적용됨
+     * defaultValue가 들어가면 required가 있던 없던 상관없음
+     * defaultValue를 적용하면 빈 문자일 경우에도 defaultValue값으로 적용됨
      */
     @ResponseBody
     @RequestMapping("/request-param-default")
@@ -86,6 +88,25 @@ public class RequestParamController {
     public String requestParamMap(@RequestParam Map<String, Object> paramMap) {
 
         log.info("username={}, age={}", paramMap.get("username"), paramMap.get("age"));
+        return "OK";
+    }
+
+    @ResponseBody
+    @RequestMapping("/model-attribute-v1")
+    public String modelAttributeV1(@ModelAttribute HelloData helloData) {
+        log.info("username={}, age={}", helloData.getUsername(), helloData.getAge());
+        log.info("helloData={}", helloData);
+        return "OK";
+    }
+
+    /**
+     * 참고) @ModelAttribute 생략가능
+     * 내가 직접 만든 클래스(객체)는 스프링에서 자동으로 @ModelAttribute로 처리해줌
+     */
+    @ResponseBody
+    @RequestMapping("/model-attribute-v2")
+    public String modelAttributeV2(HelloData helloData) {
+        log.info("username={}, age={}", helloData.getUsername(), helloData.getAge());
         return "OK";
     }
 
