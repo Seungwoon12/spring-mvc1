@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.annotation.PostConstruct;
 import java.util.List;
@@ -85,13 +86,30 @@ public class BasicItemController {
      *
      * cf) String이나 int 같은 기본타입은 그냥 적을 시 @RequestParam이 자동으로 붙음
      */
-    @PostMapping("/add")
+//    @PostMapping("/add")
     public String addItemV4(Item item) {
         // 클래스명의 첫 글자를 소문자로 바꿔서 model에 addAttribute 해준다. Item -> item
         itemRepository.save(item);
 
         return "basic/item";
     }
+
+//    @PostMapping("/add")
+    public String addItemV5(Item item) {
+        itemRepository.save(item);
+        return "redirect:/basic/items/" + item.getId(); // 지금은 숫자라서 괜찮지만 인코딩이 꼬일 수 있기 때문에 RedirectAttributes 써줘야함
+    }
+
+    @PostMapping("/add")
+    public String addItemV6(Item item, RedirectAttributes redirectAttributes) {
+        Item savedItem = itemRepository.save(item);
+        // ReditectAttributes 사용하면 치환 및 url 인코딩을 알아서 처리해줌
+        redirectAttributes.addAttribute("itemId", savedItem.getId());
+        redirectAttributes.addAttribute("status", true); // 쿼리마라미터 식으로 들어감
+        return "redirect:/basic/items/{itemId}";
+    }
+
+
 
     @GetMapping("/{itemId}/edit")
     public String editForm(@PathVariable Long itemId, Model model) {
